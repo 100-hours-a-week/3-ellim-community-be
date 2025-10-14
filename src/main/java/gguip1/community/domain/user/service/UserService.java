@@ -31,11 +31,13 @@ public class UserService {
             throw new ErrorException(ErrorCode.PASSWORD_MISMATCH);
         }
 
-        if (userRepository.existsByEmail(request.getEmail())) {
+        var duplicateCheck = userRepository.checkDuplicates(request.getEmail(), request.getNickname());
+        
+        if (duplicateCheck.isEmailExists()) {
             throw new ErrorException(ErrorCode.DUPLICATE_EMAIL);
         }
-
-        if (userRepository.existsByNickname(request.getNickname())) {
+        
+        if (duplicateCheck.isNicknameExists()) {
             throw new ErrorException(ErrorCode.DUPLICATE_NICKNAME);
         }
 
@@ -84,7 +86,7 @@ public class UserService {
         if (request.getNickname() != null && !request.getNickname().equals(user.getNickname())) {
             boolean exists = userRepository.existsByNickname(request.getNickname());
             if (exists) {
-                throw new ErrorException(ErrorCode.DUPLICATE_EMAIL);
+                throw new ErrorException(ErrorCode.DUPLICATE_NICKNAME);
             }
             user.changeNickname(request.getNickname());
         }
