@@ -170,6 +170,7 @@ public class PostService {
                 .toList();
 
         boolean isAuthor = userId != null && userId.equals(user.getUserId());
+        boolean isLiked = userId != null && postLikeRepository.existsById(new PostLikeId(userId, postId));
 
         return PostDetailResponse.builder()
                 .imageUrls(imageUrls)
@@ -184,7 +185,7 @@ public class PostService {
                 .commentCount(post.getPostStat().getCommentCount())
                 .viewCount(post.getPostStat().getViewCount())
                 .isAuthor(isAuthor)
-                .isLiked(false)
+                .isLiked(isLiked)
                 .build();
     }
 
