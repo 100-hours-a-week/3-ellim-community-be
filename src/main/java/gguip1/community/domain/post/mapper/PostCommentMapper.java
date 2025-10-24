@@ -22,6 +22,7 @@ public class PostCommentMapper {
                 )
                 .content(postComment.getContent())
                 .isAuthor(isAuthor)
+                .createdAt(postComment.getCreatedAt())
                 .build();
     }
 
