@@ -1,0 +1,129 @@
+/* CSS 변수 시스템 - 프로젝트 전체에서 사용할 디자인 토큰 */
+
+:root {
+  /* ===== 색상 시스템 ===== */
+  /* Primary Colors */
+  --color-primary: #2196F3;
+  --color-primary-light: #64B5F6;
+  --color-primary-dark: #1976D2;
+  --color-primary-bg: rgba(33, 150, 243, 0.1);
+  
+  /* Secondary Colors */
+  --color-secondary: #FFC107;
+  --color-secondary-light: #FFD54F;
+  --color-secondary-dark: #F57F17;
+  
+  /* Status Colors */
+  --color-success: #4CAF50;
+  --color-success-light: #81C784;
+  --color-success-bg: rgba(76, 175, 80, 0.1);
+  
+  --color-danger: #F44336;
+  --color-danger-light: #EF5350;
+  --color-danger-bg: rgba(244, 67, 54, 0.1);
+  
+  --color-warning: #FF9800;
+  --color-warning-light: #FFB74D;
+  --color-warning-bg: rgba(255, 152, 0, 0.1);
+  
+  --color-info: #2196F3;
+  --color-info-light: #64B5F6;
+  --color-info-bg: rgba(33, 150, 243, 0.1);
+  
+  /* Text Colors */
+  --color-text-primary: #212121;
+  --color-text-secondary: #757575;
+  --color-text-muted: #BDBDBD;
+  --color-text-white: #FFFFFF;
+  --color-text-inverse: #FFFFFF;
+  
+  /* Background Colors */
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #F5F5F5;
+  --color-bg-tertiary: #EEEEEE;
+  --color-bg-hover: #F0F0F0;
+  --color-bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  /* Border Colors */
+  --color-border-light: #E0E0E0;
+  --color-border-medium: #BDBDBD;
+  --color-border-dark: #757575;
+  
+  /* ===== 간격 시스템 ===== */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  --spacing-xxxl: 64px;
+  
+  /* ===== 폰트 시스템 ===== */
+  --font-family-base: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-mono: 'Fira Code', 'Monaco', 'Consolas', monospace;
+  
+  /* Font Sizes */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-xxl: 24px;
+  --font-size-xxxl: 32px;
+  
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-base: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* ===== 둥근 모서리 ===== */
+  --border-radius-xs: 2px;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-full: 50%;
+  
+  /* ===== 그림자 시스템 ===== */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  
+  /* ===== 전환 효과 ===== */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+  
+  /* ===== Z-Index 시스템 ===== */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  
+  /* ===== 브레이크포인트 ===== */
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-xxl: 1400px;
+  
+  /* ===== 컨테이너 최대 너비 ===== */
+  --container-sm: 540px;
+  --container-md: 720px;
+  --container-lg: 960px;
+  --container-xl: 1140px;
+  --container-xxl: 1320px;
+}
