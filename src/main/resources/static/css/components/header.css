@@ -1,0 +1,180 @@
+/* ===== 헤더 컴포넌트 ===== */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-lg);
+    height: 60px;
+    background-color: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    z-index: var(--z-sticky);
+}
+
+/* ===== 헤더 제목 ===== */
+header .title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin: 0;
+    line-height: var(--line-height-tight);
+}
+
+/* ===== 헤더 버튼들 ===== */
+header .back-btn, 
+header .profile-btn {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+header .back-btn:hover,
+header .profile-btn:hover {
+    background-color: var(--color-bg-hover);
+}
+
+header .back-btn:focus,
+header .profile-btn:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* ===== 헤더 아이콘 ===== */
+header .back-btn img, 
+header .profile-btn img {
+    width: 30px;
+    height: 30px;
+    display: block;
+    transition: transform var(--transition-fast);
+}
+
+header .back-btn:hover img,
+header .profile-btn:hover img {
+    transform: scale(1.1);
+}
+
+/* ===== 프로필 드롭다운 ===== */
+header .profile-dropdown {
+    position: absolute;
+    top: 100%;
+    right: var(--spacing-lg);
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    padding: var(--spacing-xs) 0;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+    pointer-events: none;
+    transition: opacity var(--transition-base), 
+                transform var(--transition-base);
+    z-index: var(--z-dropdown);
+    overflow: hidden;
+}
+
+header .profile-dropdown.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* ===== 드롭다운 아이템 ===== */
+header .profile-dropdown-item {
+    margin: 0;
+    padding: 0;
+}
+
+header .profile-dropdown-item a, 
+header .profile-dropdown-item button {
+    all: unset;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), 
+                color var(--transition-fast);
+    border-radius: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+header .profile-dropdown-item:first-child a,
+header .profile-dropdown-item:first-child button {
+    border-top-left-radius: var(--border-radius-md);
+    border-top-right-radius: var(--border-radius-md);
+}
+
+header .profile-dropdown-item:last-child a,
+header .profile-dropdown-item:last-child button {
+    border-bottom-left-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-md);
+}
+
+/* ===== 드롭다운 호버 효과 ===== */
+header .profile-dropdown-item a:hover,
+header .profile-dropdown-item a:focus-visible,
+header .profile-dropdown-item button:hover,
+header .profile-dropdown-item button:focus-visible {
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary);
+    outline: none;
+}
+
+/* ===== 로그아웃 버튼 특별 스타일 ===== */
+header .profile-dropdown-item .logout-btn {
+    color: var(--color-danger);
+}
+
+header .profile-dropdown-item .logout-btn:hover,
+header .profile-dropdown-item .logout-btn:focus-visible {
+    background-color: var(--color-danger-bg);
+    color: var(--color-danger);
+    outline: none;
+}
+
+/* ===== 반응형 디자인 ===== */
+@media (max-width: 768px) {
+    header {
+        padding: 0 var(--spacing-md);
+        height: 56px;
+    }
+    
+    header .title {
+        font-size: var(--font-size-lg);
+    }
+    
+    header .back-btn,
+    header .profile-btn {
+        width: 36px;
+        height: 36px;
+    }
+    
+    header .back-btn img,
+    header .profile-btn img {
+        width: 20px;
+        height: 20px;
+    }
+    
+    header .profile-dropdown {
+        right: var(--spacing-md);
+        min-width: 180px;
+    }
+}
