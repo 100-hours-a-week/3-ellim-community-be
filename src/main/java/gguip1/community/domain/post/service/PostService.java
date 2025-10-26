@@ -71,48 +71,6 @@ public class PostService {
     }
 
     @Transactional
-    public void createLike(Long userId, Long postId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ErrorException(ErrorCode.USER_NOT_FOUND));
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new ErrorException(ErrorCode.NOT_FOUND));
-
-        if (postLikeRepository.existsById(new PostLikeId(userId, postId))) {
-            throw new ErrorException(ErrorCode.DUPLICATE_LIKE);
-        }
-
-        PostLikeId postLikeId = new PostLikeId(userId, postId);
-        PostLike postLike = postLikeMapper.toEntity(postLikeId, post, user);
-
-        post.getPostStat().incrementLikeCount();
-        postLikeRepository.save(postLike);
-
-        /**
-         * 개선 필요한 부분 JPQL로 엔티티에서 좋아요 증가가 아닌 DB 레벨에서 증가하도록 수정 필요
-         */
-        postRepository.save(post);
-    }
-
-    @Transactional
-    public void deleteLike(Long userId, Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new ErrorException(ErrorCode.NOT_FOUND));
-
-        PostLikeId postLikeId = new PostLikeId(userId, postId);
-
-        if (!postLikeRepository.existsById(postLikeId)) {
-            throw new ErrorException(ErrorCode.NOT_FOUND);
-        }
-
-        /**
-         * 개선 필요한 부분 JPQL로 엔티티에서 좋아요 증가가 아닌 DB 레벨에서 증가하도록 수정 필요
-         */
-        post.getPostStat().decrementLikeCount();
-        postLikeRepository.deleteById(postLikeId);
-        postRepository.save(post);
-    }
-
-    @Transactional
     public PostPageResponse getPosts(Long lastPostId, int pageSize) {
         List<Post> posts =
                 lastPostId == null ? postRepository.findFirstPage(pageSize + 1) : postRepository.findNextPage(lastPostId, pageSize + 1);
@@ -127,6 +85,12 @@ public class PostService {
                     List<String> imageUrls = post.getPostImages().stream()
                             .map(postImage -> postImage.getImage().getUrl())
                             .toList();
+
+                    System.out.println(user.getProfileImage() != null ? user.getProfileImage().getUrl() : null);
+                    System.out.println(new AuthorDto(
+                            user.getNickname(),
+                            user.getProfileImage() != null ? user.getProfileImage().getUrl() : null
+                    ));
 
                     return PostPageItemResponse.builder()
                             .postId(post.getPostId())
