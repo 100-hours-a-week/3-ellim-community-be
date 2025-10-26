@@ -33,6 +33,7 @@ public class PostController {
             @RequestParam Optional<Long> lastPostId
     ){
         PostPageResponse response = postService.getPosts(lastPostId.orElse(null), 5);
+        System.out.println(response);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ApiResponse.success("Posts retrieved successfully", response)
         );

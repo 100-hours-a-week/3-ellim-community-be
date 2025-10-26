@@ -20,6 +20,6 @@ public class LocalFileService implements FileService{
         Files.createDirectories(path.getParent()); // 디렉토리 생성
         file.transferTo(path.toFile()); // 파일 저장
 
-        return uploadDir + filename;
+        return filename;
     }
 }
