@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,10 +37,9 @@ public class UserController {
     }
 
     @PatchMapping("/users/me")
-    public ResponseEntity<ApiResponse<Void>> updateMyInfo(@AuthenticationPrincipal CustomUserDetails user,
+    public ResponseEntity<ApiResponse<UserUpdateResponse>> updateMyInfo(@AuthenticationPrincipal CustomUserDetails user,
                                                           @Valid @RequestBody UserUpdateRequest requestBody) {
-        userService.updateUser(user.getUserId(), requestBody);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("update_user_success", userService.updateUser(user.getUserId(), requestBody)));
     }
 
     /*

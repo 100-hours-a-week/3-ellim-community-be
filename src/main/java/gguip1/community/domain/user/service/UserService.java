@@ -59,7 +59,7 @@ public class UserService {
 
     // users/{userId} (관리자 등 타인) 정보 수정
     @Transactional
-    public void updateUser(Long userId, UserUpdateRequest request){
+    public UserUpdateResponse updateUser(Long userId, UserUpdateRequest request){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ErrorException(ErrorCode.USER_NOT_FOUND));
 
@@ -78,6 +78,8 @@ public class UserService {
         user.updateProfile(profileImage, request.nickname());
 
         userRepository.save(user);
+
+        return userMapper.toUserUpdateResponse(user);
     }
 
     @Transactional
