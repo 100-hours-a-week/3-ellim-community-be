@@ -86,12 +86,6 @@ public class PostService {
                             .map(postImage -> postImage.getImage().getUrl())
                             .toList();
 
-                    System.out.println(user.getProfileImage() != null ? user.getProfileImage().getUrl() : null);
-                    System.out.println(new AuthorDto(
-                            user.getNickname(),
-                            user.getProfileImage() != null ? user.getProfileImage().getUrl() : null
-                    ));
-
                     return PostPageItemResponse.builder()
                             .postId(post.getPostId())
                             .imageUrls(imageUrls)
