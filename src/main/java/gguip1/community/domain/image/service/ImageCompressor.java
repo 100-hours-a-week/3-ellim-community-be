@@ -13,7 +13,7 @@ import java.util.Iterator;
 
 @Service
 public class ImageCompressor {
-    public ByteArrayMultipartFile compressImage(MultipartFile multipartFile, float compressionQuality) throws IOException {
+    public MultipartFile compressImage(MultipartFile multipartFile, float compressionQuality) throws IOException {
         BufferedImage originalImage = ImageIO.read(multipartFile.getInputStream());
 
         Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
