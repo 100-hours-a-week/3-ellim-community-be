@@ -38,7 +38,10 @@ public class SecurityConfig {
             "/js/**",
             "/assets/**",
             "/components/**",
-            "/static/**"
+            "/static/**",
+            "/users/check-email",
+            "/users/check-nickname",
+            "/error",
     };
 
     private final HandlerExceptionResolver handlerExceptionResolver;

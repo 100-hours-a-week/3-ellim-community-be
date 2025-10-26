@@ -10,6 +10,7 @@ public enum ErrorCode {
     // 400
     VALIDATION_FAILED(HttpStatus.BAD_REQUEST,  "VALIDATION_ERROR", "요청 데이터가 올바르지 않습니다."),
 
+
     // 401
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "INVALID_CREDENTIALS", "인증 정보가 올바르지 않습니다."),
     PASSWORD_MISMATCH(HttpStatus.UNAUTHORIZED, "PASSWORD_MISMATCH","비밀번호가 일치하지 않습니다."),
