@@ -2,10 +2,7 @@ package gguip1.community.domain.user.service;
 
 import gguip1.community.domain.image.entity.Image;
 import gguip1.community.domain.image.repository.ImageRepository;
-import gguip1.community.domain.user.dto.UserCreateRequest;
-import gguip1.community.domain.user.dto.UserPasswordUpdateRequest;
-import gguip1.community.domain.user.dto.UserResponse;
-import gguip1.community.domain.user.dto.UserUpdateRequest;
+import gguip1.community.domain.user.dto.*;
 import gguip1.community.domain.user.entity.User;
 import gguip1.community.domain.user.mapper.UserMapper;
 import gguip1.community.domain.user.repository.UserRepository;
@@ -106,4 +103,13 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+    public boolean existsByEmail(UserEmailCheckRequest request) {
+        return userRepository.existsByEmail(request.email());
+    }
+
+    public boolean existsByNickname(UserNicknameCheckRequest request) {
+        return userRepository.existsByNickname(request.nickname());
+    }
+
 }

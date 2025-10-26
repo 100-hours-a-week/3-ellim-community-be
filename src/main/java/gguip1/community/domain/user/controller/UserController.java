@@ -1,9 +1,6 @@
 package gguip1.community.domain.user.controller;
 
-import gguip1.community.domain.user.dto.UserCreateRequest;
-import gguip1.community.domain.user.dto.UserPasswordUpdateRequest;
-import gguip1.community.domain.user.dto.UserResponse;
-import gguip1.community.domain.user.dto.UserUpdateRequest;
+import gguip1.community.domain.user.dto.*;
 import gguip1.community.domain.user.service.UserService;
 import gguip1.community.global.response.ApiResponse;
 import gguip1.community.global.security.CustomUserDetails;
@@ -16,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -80,20 +78,6 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    /*
-     * 주석 처리의 근거는 다음과 같습니다.
-     * - /users/me 로 본인 정보 수정이 가능함
-     * - path variable로 userId를 받는 거 자체가 보안상 위험할 수 있다고 판단함
-     * - 기존에는 관리자를 고려해서 만들었으나, 현재는 관리자 기능이 없음
-     * - 추후 관리자 기능이 필요하게 된다면 현재 User Entity를 대대적으로 수저할 필요가 있음
-     * - 따라서, 관리자 기능이 필요하게 될 때 다시 고려하는 것이 좋다고 판단됨
-     */
-//    @PatchMapping("/users/{userId}/password")
-//    public ResponseEntity<ApiResponse<Void>> updateUserPassword(@PathVariable Long userId, @AuthenticationPrincipal CustomUserDetails user, @RequestBody UserPasswordUpdateRequest request) {
-//        userService.updateUserPassword(userId, request);
-//        return ResponseEntity.noContent().build();
-//    }
-
     @DeleteMapping("/users/me")
     public ResponseEntity<Void> deleteMyAccount(@AuthenticationPrincipal CustomUserDetails user,
                                                 HttpServletRequest httpRequest,
@@ -113,17 +97,13 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    /*
-     * 주석 처리의 근거는 다음과 같습니다.
-     * - /users/me 로 본인 정보 수정이 가능함
-     * - path variable로 userId를 받는 거 자체가 보안상 위험할 수 있다고 판단함
-     * - 기존에는 관리자를 고려해서 만들었으나, 현재는 관리자 기능이 없음
-     * - 추후 관리자 기능이 필요하게 된다면 현재 User Entity를 대대적으로 수저할 필요가 있음
-     * - 따라서, 관리자 기능이 필요하게 될 때 다시 고려하는 것이 좋다고 판단됨
-     */
-//    @DeleteMapping("/users/{userId}")
-//    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
-//        userService.deleteUser(userId);
-//        return ResponseEntity.noContent().build();
-//    }
+    @PostMapping("users/check-email")
+    public ResponseEntity<ApiResponse<UserEmailCheckResponse>> checkEmail(@Valid @RequestBody UserEmailCheckRequest userEmailCheckRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("email_available", new UserEmailCheckResponse(userService.existsByEmail(userEmailCheckRequest))));
+    }
+
+    @PostMapping("users/check-nickname")
+    public ResponseEntity<ApiResponse<UserNicknameCheckResponse>> checkNickname(@Valid @RequestBody UserNicknameCheckRequest userNicknameCheckRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("nickname_available", new UserNicknameCheckResponse(userService.existsByNickname(userNicknameCheckRequest))));
+    }
 }
