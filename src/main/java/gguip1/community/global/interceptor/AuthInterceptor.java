@@ -1,8 +1,8 @@
 package gguip1.community.global.interceptor;
 
-
+/**
+ * 인터셉터 설정 클래스
+ * 현재는 빈 클래스이며, 추후 인가 관련 인터셉터 설정에 사용될 예정
+ */
 public class AuthInterceptor {
-    /*
-     * 현재 인증만으로 접근을 제어하기 때문에 인가의 개념이 필요하지 않아 구현하지 않음
-     */
 }

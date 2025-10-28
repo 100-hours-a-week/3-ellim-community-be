@@ -14,6 +14,14 @@ import java.util.logging.Filter;
 @Configuration
 public class CorsConfig {
 
+    /**
+     * CORS 필터 설정
+     * setAllowCredentials(true) : 자격 증명 허용
+     * setAllowedOrigins(List.of("http://localhost:3000")) : 허용할 출처 설정
+     * setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")) : 허용할 HTTP 메서드 설정
+     * setAllowedHeaders(List.of("*")) : 허용할 헤더 설정
+     * setMaxAge(3600L) : 사전 요청 캐시 시간 설정
+     */
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
