@@ -27,3 +27,8 @@ logging:
     org.hibernate.SQL: debug
     org.springframework.boot.servlet: DEBUG
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: mappings
