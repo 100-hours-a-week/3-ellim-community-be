@@ -2,10 +2,7 @@ package gguip1.community.domain.user.service;
 
 import gguip1.community.domain.image.entity.Image;
 import gguip1.community.domain.image.repository.ImageRepository;
-import gguip1.community.domain.user.dto.UserCreateRequest;
-import gguip1.community.domain.user.dto.UserPasswordUpdateRequest;
-import gguip1.community.domain.user.dto.UserResponse;
-import gguip1.community.domain.user.dto.UserUpdateRequest;
+import gguip1.community.domain.user.dto.*;
 import gguip1.community.domain.user.entity.User;
 import gguip1.community.domain.user.mapper.UserMapper;
 import gguip1.community.domain.user.repository.UserRepository;
@@ -62,7 +59,7 @@ public class UserService {
 
     // users/{userId} (관리자 등 타인) 정보 수정
     @Transactional
-    public void updateUser(Long userId, UserUpdateRequest request){
+    public UserUpdateResponse updateUser(Long userId, UserUpdateRequest request){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ErrorException(ErrorCode.USER_NOT_FOUND));
 
@@ -81,6 +78,8 @@ public class UserService {
         user.updateProfile(profileImage, request.nickname());
 
         userRepository.save(user);
+
+        return userMapper.toUserUpdateResponse(user);
     }
 
     @Transactional
@@ -106,4 +105,13 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+    public boolean existsByEmail(UserEmailCheckRequest request) {
+        return userRepository.existsByEmail(request.email());
+    }
+
+    public boolean existsByNickname(UserNicknameCheckRequest request) {
+        return userRepository.existsByNickname(request.nickname());
+    }
+
 }

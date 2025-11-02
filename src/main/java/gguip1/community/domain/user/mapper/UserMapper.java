@@ -4,6 +4,7 @@ import gguip1.community.domain.auth.dto.AuthResponse;
 import gguip1.community.domain.image.entity.Image;
 import gguip1.community.domain.user.dto.UserCreateRequest;
 import gguip1.community.domain.user.dto.UserResponse;
+import gguip1.community.domain.user.dto.UserUpdateResponse;
 import gguip1.community.domain.user.entity.User;
 import gguip1.community.global.security.CustomUserDetails;
 import org.springframework.stereotype.Component;
@@ -44,5 +45,14 @@ public class UserMapper {
                 .profileImageUrl(user.getProfileImage() != null ? user.getProfileImage().getUrl() : null)
                 .nickname(user.getNickname())
                 .build();
+    }
+
+    public UserUpdateResponse toUserUpdateResponse(User user) {
+        return new UserUpdateResponse(
+                user.getUserId(),
+                user.getEmail(),
+                user.getProfileImage() != null ? user.getProfileImage().getUrl() : null,
+                user.getNickname()
+        );
     }
 }
