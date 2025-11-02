@@ -1,3 +1,8 @@
+server:
+  servlet:
+    session:
+      timeout: 30m
+
 spring:
   application:
     name: community
@@ -20,5 +25,5 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug
-    org.springframework.security: DEBUG
+    org.springframework.boot.servlet: DEBUG
 

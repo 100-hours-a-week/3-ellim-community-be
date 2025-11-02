@@ -32,12 +32,13 @@ dependencies {
      * 유효성 검사(Validation) 라이브러리
      */
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    /**
-     * 인증 및 인가 라이브러리
-     */
-    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    /**
+     * 비밀번호 암호화를 위한 Spring Security Crypto 모듈
+     */
+    implementation 'org.springframework.security:spring-security-crypto:6.4.4'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
