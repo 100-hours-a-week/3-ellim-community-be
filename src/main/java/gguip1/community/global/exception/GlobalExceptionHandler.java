@@ -21,43 +21,4 @@ public class GlobalExceptionHandler {
                 .status(errorCode.getStatus())
                 .body(ApiResponse.error(errorCode.getCode(), new ErrorResponse(errorCode.getMessage())));
     }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Void>> handleValidationException(MethodArgumentNotValidException e) {
-        String errorMessage = e.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
-                .findFirst()
-                .orElse("Invalid input");
-
-        ErrorCode errorCode = ErrorCode.VALIDATION_FAILED;
-
-        return ResponseEntity
-                .status(errorCode.getStatus())
-                .body(ApiResponse.error(errorCode.getCode(), new ErrorResponse(errorMessage)));
-    }
-
-//    @ExceptionHandler(BindException.class)
-//    public ResponseEntity<ApiResponse<Void>> handleBindException(BindException e) {
-//        String errorMessage = e.getBindingResult().getFieldErrors().stream()
-//                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
-//                .findFirst()
-//                .orElse("Invalid input");
-//
-//        ErrorCode errorCode = ErrorCode.VALIDATION_FAILED;
-//
-//        return ResponseEntity
-//                .status(errorCode.getStatus())
-//                .body(ApiResponse.error(errorCode.getCode(), new ErrorResponse(errorMessage)));
-//    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ApiResponse<Void>> handleConstraintViolationException(ConstraintViolationException e) {
-        String errorMessage = e.getConstraintName() + ": " + e.getMessage();
-
-        ErrorCode errorCode = ErrorCode.VALIDATION_FAILED;
-
-        return ResponseEntity
-                .status(errorCode.getStatus())
-                .body(ApiResponse.error(errorCode.getCode(), new ErrorResponse(errorMessage)));
-    }
 }
