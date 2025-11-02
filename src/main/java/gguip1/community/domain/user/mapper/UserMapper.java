@@ -28,12 +28,13 @@ public class UserMapper {
                 .build();
     }
 
-    public AuthResponse toAuthResponse(User user) {
+    public AuthResponse toAuthResponse(User user, String accessToken) {
         return AuthResponse.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
                 .profileImageUrl(user.getProfileImage() != null ? user.getProfileImage().getUrl() : null)
                 .nickname(user.getNickname())
+                .accessToken(accessToken)
                 .build();
     }
 
