@@ -1,6 +1,10 @@
 package gguip1.community.domain.user.controller;
 
-import gguip1.community.domain.user.dto.*;
+import gguip1.community.domain.user.dto.request.*;
+import gguip1.community.domain.user.dto.response.UserEmailCheckResponse;
+import gguip1.community.domain.user.dto.response.UserNicknameCheckResponse;
+import gguip1.community.domain.user.dto.response.UserResponse;
+import gguip1.community.domain.user.dto.response.UserUpdateResponse;
 import gguip1.community.domain.user.service.UserService;
 import gguip1.community.global.context.SecurityContext;
 import gguip1.community.global.response.ApiResponse;

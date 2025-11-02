@@ -21,9 +21,15 @@ spring:
           use_sql_comments: true
   profiles:
     active: dev
+  messages:
+    basename: ValidationMessages
+    encoding: UTF-8
 
 logging:
   level:
     org.hibernate.SQL: debug
     org.springframework.boot.servlet: DEBUG
+  charset:
+    console: UTF-8
+    file: UTF-8
 

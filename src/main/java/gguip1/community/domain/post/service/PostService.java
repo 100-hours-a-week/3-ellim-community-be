@@ -2,14 +2,17 @@ package gguip1.community.domain.post.service;
 
 import gguip1.community.domain.image.entity.Image;
 import gguip1.community.domain.image.repository.ImageRepository;
-import gguip1.community.domain.post.dto.*;
+import gguip1.community.domain.post.dto.request.PostCreateRequest;
+import gguip1.community.domain.post.dto.request.PostUpdateRequest;
+import gguip1.community.domain.post.dto.response.AuthorResponse;
+import gguip1.community.domain.post.dto.response.PostDetailResponse;
+import gguip1.community.domain.post.dto.response.PostPageItemResponse;
+import gguip1.community.domain.post.dto.response.PostPageResponse;
 import gguip1.community.domain.post.entity.*;
 import gguip1.community.domain.post.id.PostImageId;
 import gguip1.community.domain.post.id.PostLikeId;
 import gguip1.community.domain.post.mapper.PostImageMapper;
-import gguip1.community.domain.post.mapper.PostLikeMapper;
 import gguip1.community.domain.post.mapper.PostMapper;
-import gguip1.community.domain.post.repository.PostCommentRepository;
 import gguip1.community.domain.post.repository.PostImageRepository;
 import gguip1.community.domain.post.repository.PostLikeRepository;
 import gguip1.community.domain.post.repository.PostRepository;
@@ -21,10 +24,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -41,16 +42,16 @@ public class PostService {
     private final PostImageMapper postImageMapper;
 
     @Transactional
-    public void createPost(Long userId, PostRequest postRequest) {
+    public void createPost(Long userId, PostCreateRequest postCreateRequest) {
         List<Image> images = Collections.emptyList();
-        if (postRequest.imageIds() != null && !postRequest.imageIds().isEmpty()) {
-            images = imageRepository.findAllById(postRequest.imageIds());
+        if (postCreateRequest.imageIds() != null && !postCreateRequest.imageIds().isEmpty()) {
+            images = imageRepository.findAllById(postCreateRequest.imageIds());
         }
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ErrorException(ErrorCode.USER_NOT_FOUND));
 
-        Post post = postMapper.fromPostRequest(postRequest, user);
+        Post post = postMapper.fromPostRequest(postCreateRequest, user);
 
         postRepository.save(post);
 
@@ -83,7 +84,7 @@ public class PostService {
                             .imageUrls(imageUrls)
                             .title(post.getTitle())
                             .content(post.getContent())
-                            .author(new AuthorDto(
+                            .author(new AuthorResponse(
                                     user.getNickname(),
                                     user.getProfileImage() != null ? user.getProfileImage().getUrl() : null
                             ))
@@ -126,7 +127,7 @@ public class PostService {
                 .imageUrls(imageUrls)
                 .title(post.getTitle())
                 .content(post.getContent())
-                .author(new AuthorDto(
+                .author(new AuthorResponse(
                         user.getNickname(),
                         user.getProfileImage() != null ? user.getProfileImage().getUrl() : null
                 ))

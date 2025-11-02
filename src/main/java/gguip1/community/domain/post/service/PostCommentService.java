@@ -1,8 +1,8 @@
 package gguip1.community.domain.post.service;
 
-import gguip1.community.domain.post.dto.PostCommentPageItemResponse;
-import gguip1.community.domain.post.dto.PostCommentPageResponse;
-import gguip1.community.domain.post.dto.PostCommentRequest;
+import gguip1.community.domain.post.dto.response.PostCommentPageItemResponse;
+import gguip1.community.domain.post.dto.response.PostCommentPageResponse;
+import gguip1.community.domain.post.dto.request.PostCommentRequest;
 import gguip1.community.domain.post.entity.Post;
 import gguip1.community.domain.post.entity.PostComment;
 import gguip1.community.domain.post.mapper.PostCommentMapper;

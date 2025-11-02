@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.net.BindException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -20,5 +22,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(errorCode.getStatus())
                 .body(ApiResponse.error(errorCode.getCode(), new ErrorResponse(errorCode.getMessage())));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Void>> handleValidationException(MethodArgumentNotValidException e) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                "유효하지 않은 입력 값입니다."
+        );
+
+        return ResponseEntity
+                .badRequest()
+                .body(ApiResponse.error("validation_error", errorResponse));
     }
 }

@@ -2,9 +2,9 @@ package gguip1.community.domain.user.mapper;
 
 import gguip1.community.domain.auth.dto.AuthResponse;
 import gguip1.community.domain.image.entity.Image;
-import gguip1.community.domain.user.dto.UserCreateRequest;
-import gguip1.community.domain.user.dto.UserResponse;
-import gguip1.community.domain.user.dto.UserUpdateResponse;
+import gguip1.community.domain.user.dto.request.UserCreateRequest;
+import gguip1.community.domain.user.dto.response.UserResponse;
+import gguip1.community.domain.user.dto.response.UserUpdateResponse;
 import gguip1.community.domain.user.entity.User;
 import org.springframework.stereotype.Component;
 
