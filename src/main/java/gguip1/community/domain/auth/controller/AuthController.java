@@ -5,6 +5,7 @@ import gguip1.community.domain.auth.dto.AuthResponse;
 import gguip1.community.domain.auth.service.AuthService;
 import gguip1.community.global.context.SecurityContext;
 import gguip1.community.global.response.ApiResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -33,11 +34,17 @@ public class AuthController {
     }
 
     @DeleteMapping("/auth")
-    public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest httpRequest,
-                                                    HttpServletResponse httpResponse) {
+    public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest request,
+                                                    HttpServletResponse response) {
         SecurityContext.clear();
 
-        HttpSession session = httpRequest.getSession(false);
+        Cookie cookie = new Cookie("JSESSIONID", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+
+        HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
