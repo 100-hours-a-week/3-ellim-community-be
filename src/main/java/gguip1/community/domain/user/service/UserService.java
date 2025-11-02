@@ -16,13 +16,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    // Repository
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
 
-    // User <-> User 관련 DTO 상호 변환용 Mapper
     private final UserMapper userMapper;
-    // 비밀번호 암호화 관련
     private final PasswordEncoder passwordEncoder;
 
 //    @Transactional
@@ -113,5 +110,4 @@ public class UserService {
     public boolean existsByNickname(UserNicknameCheckRequest request) {
         return userRepository.existsByNickname(request.nickname());
     }
-
 }

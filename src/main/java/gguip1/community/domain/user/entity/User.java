@@ -60,6 +60,4 @@ public class User extends SoftDeleteEntity {
 
 //        this.nickname += "_deleted";
     }
-
-    // 복구에 대한 고려
 }

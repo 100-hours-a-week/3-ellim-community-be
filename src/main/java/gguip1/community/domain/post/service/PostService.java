@@ -30,22 +30,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 @RequiredArgsConstructor
 public class PostService {
-    // Repository
     private final PostRepository postRepository;
     private final ImageRepository imageRepository;
     private final PostImageRepository postImageRepository;
     private final UserRepository userRepository;
     private final PostLikeRepository postLikeRepository;
-    private final PostCommentRepository postCommentRepository;
 
-    // Post <-> Post 관련 DTO 상호 변환용 Mapper
     private final PostMapper postMapper;
 
-    // PostImage 상호 변환용 Mapper
     private final PostImageMapper postImageMapper;
-
-    // PostLike 상호 변환용 Mapper
-    private final PostLikeMapper postLikeMapper;
 
     @Transactional
     public void createPost(Long userId, PostRequest postRequest) {
@@ -191,6 +184,7 @@ public class PostService {
             throw new ErrorException(ErrorCode.ACCESS_DENIED);
         }
 
-        postRepository.delete(post);
+        post.softDelete();
+        postRepository.save(post);
     }
 }
