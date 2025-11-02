@@ -1,4 +1,7 @@
 server:
+  tomcat:
+    max-swallow-size: 20MB
+    max-http-form-post-size: 20MB
   servlet:
     session:
       timeout: 30m
@@ -24,6 +27,12 @@ spring:
   messages:
     basename: ValidationMessages
     encoding: UTF-8
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 25MB
+      file-size-threshold: 2MB
+      resolve-lazily: true
 
 logging:
   level:
