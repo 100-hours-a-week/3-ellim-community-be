@@ -1,9 +1,6 @@
 package gguip1.community.domain.user;
 
-import gguip1.community.domain.image.entity.Image;
-import gguip1.community.domain.image.repository.ImageRepository;
-import gguip1.community.domain.user.dto.UserCreateRequest;
-import gguip1.community.domain.user.dto.UserResponse;
+import gguip1.community.domain.user.dto.request.UserCreateRequest;
 import gguip1.community.domain.user.entity.User;
 import gguip1.community.domain.user.mapper.UserMapper;
 import gguip1.community.domain.user.repository.UserRepository;

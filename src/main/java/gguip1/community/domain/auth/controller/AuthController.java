@@ -33,11 +33,17 @@ public class AuthController {
     }
 
     @DeleteMapping("/auth")
-    public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest httpRequest,
-                                                    HttpServletResponse httpResponse) {
+    public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest request,
+                                                    HttpServletResponse response) {
         SecurityContext.clear();
 
-        HttpSession session = httpRequest.getSession(false);
+        Cookie cookie = new Cookie("JSESSIONID", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+
+        HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }

@@ -1,8 +1,8 @@
 package gguip1.community.domain.post.controller;
 
-import gguip1.community.domain.post.dto.PostCommentPageItemResponse;
-import gguip1.community.domain.post.dto.PostCommentPageResponse;
-import gguip1.community.domain.post.dto.PostCommentRequest;
+import gguip1.community.domain.post.dto.response.PostCommentPageItemResponse;
+import gguip1.community.domain.post.dto.response.PostCommentPageResponse;
+import gguip1.community.domain.post.dto.request.PostCommentRequest;
 import gguip1.community.domain.post.service.PostCommentService;
 import gguip1.community.global.context.SecurityContext;
 import gguip1.community.global.response.ApiResponse;

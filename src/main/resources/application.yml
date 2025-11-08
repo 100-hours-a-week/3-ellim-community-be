@@ -1,4 +1,7 @@
 server:
+  tomcat:
+    max-swallow-size: 20MB
+    max-http-form-post-size: 20MB
   servlet:
     session:
       timeout: 30m
@@ -21,9 +24,21 @@ spring:
           use_sql_comments: true
   profiles:
     active: dev
+  messages:
+    basename: ValidationMessages
+    encoding: UTF-8
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 25MB
+      file-size-threshold: 2MB
+      resolve-lazily: true
 
 logging:
   level:
     org.hibernate.SQL: debug
     org.springframework.boot.servlet: DEBUG
+  charset:
+    console: UTF-8
+    file: UTF-8
 
