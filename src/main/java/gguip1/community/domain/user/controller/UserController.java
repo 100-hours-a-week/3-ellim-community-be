@@ -1,6 +1,10 @@
 package gguip1.community.domain.user.controller;
 
-import gguip1.community.domain.user.dto.*;
+import gguip1.community.domain.user.dto.request.*;
+import gguip1.community.domain.user.dto.response.UserEmailCheckResponse;
+import gguip1.community.domain.user.dto.response.UserNicknameCheckResponse;
+import gguip1.community.domain.user.dto.response.UserResponse;
+import gguip1.community.domain.user.dto.response.UserUpdateResponse;
 import gguip1.community.domain.user.service.UserService;
 import gguip1.community.global.context.SecurityContext;
 import gguip1.community.global.response.ApiResponse;
@@ -44,11 +48,18 @@ public class UserController {
 
     @PatchMapping("/users/me/password")
     public ResponseEntity<ApiResponse<Void>> updateMyPassword(@Valid @RequestBody UserPasswordUpdateRequest requestBody,
-                                                              HttpServletRequest httpRequest) {
+                                                              HttpServletRequest request,
+                                                              HttpServletResponse response) {
         Long userId = SecurityContext.getCurrentUserId();
         userService.updateUserPassword(userId, requestBody);
 
-        HttpSession session = httpRequest.getSession(false);
+        Cookie cookie = new Cookie("JSESSIONID", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+
+        HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }

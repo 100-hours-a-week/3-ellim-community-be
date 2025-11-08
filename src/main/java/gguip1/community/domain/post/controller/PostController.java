@@ -1,6 +1,9 @@
 package gguip1.community.domain.post.controller;
 
-import gguip1.community.domain.post.dto.*;
+import gguip1.community.domain.post.dto.request.PostCreateRequest;
+import gguip1.community.domain.post.dto.request.PostUpdateRequest;
+import gguip1.community.domain.post.dto.response.PostDetailResponse;
+import gguip1.community.domain.post.dto.response.PostPageResponse;
 import gguip1.community.domain.post.service.PostService;
 import gguip1.community.global.context.SecurityContext;
 import gguip1.community.global.response.ApiResponse;
@@ -18,8 +21,8 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public ResponseEntity<ApiResponse<Void>> createPost(@Valid @RequestBody PostRequest postRequest) {
-        postService.createPost(SecurityContext.getCurrentUserId(), postRequest);
+    public ResponseEntity<ApiResponse<Void>> createPost(@Valid @RequestBody PostCreateRequest postCreateRequest) {
+        postService.createPost(SecurityContext.getCurrentUserId(), postCreateRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiResponse.success("Post created", null)
         );

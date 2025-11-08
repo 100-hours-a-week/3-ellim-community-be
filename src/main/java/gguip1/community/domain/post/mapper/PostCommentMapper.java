@@ -1,8 +1,7 @@
 package gguip1.community.domain.post.mapper;
 
-import gguip1.community.domain.post.dto.AuthorDto;
-import gguip1.community.domain.post.dto.PostCommentPageItemResponse;
-import gguip1.community.domain.post.dto.PostCommentPageResponse;
+import gguip1.community.domain.post.dto.response.AuthorResponse;
+import gguip1.community.domain.post.dto.response.PostCommentPageItemResponse;
 import gguip1.community.domain.post.entity.Post;
 import gguip1.community.domain.post.entity.PostComment;
 import gguip1.community.domain.user.entity.User;
@@ -15,7 +14,7 @@ public class PostCommentMapper {
         return PostCommentPageItemResponse.builder()
                 .commentId(postComment.getCommentId())
                 .author(
-                        new AuthorDto(
+                        new AuthorResponse(
                                 user.getNickname(),
                                 user.getProfileImage() != null ? user.getProfileImage().getUrl() : null
                         )
@@ -39,7 +38,7 @@ public class PostCommentMapper {
         return PostCommentPageItemResponse.builder()
                 .commentId(postComment.getCommentId())
                 .content(postComment.getContent())
-                .author(new AuthorDto(user.getNickname(),
+                .author(new AuthorResponse(user.getNickname(),
                         user.getProfileImage() != null ? user.getProfileImage().getUrl() : null))
                 .isAuthor(isAuthor)
                 .build();
