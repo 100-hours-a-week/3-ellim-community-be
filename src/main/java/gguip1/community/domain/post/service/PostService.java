@@ -1,6 +1,5 @@
 package gguip1.community.domain.post.service;
 
-import gguip1.community.domain.auth.entity.Session;
 import gguip1.community.domain.image.entity.Image;
 import gguip1.community.domain.image.repository.ImageRepository;
 import gguip1.community.domain.post.dto.*;
