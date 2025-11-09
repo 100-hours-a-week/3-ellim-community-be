@@ -2,6 +2,7 @@ package gguip1.community.global.exception;
 
 import gguip1.community.global.response.ApiResponse;
 import gguip1.community.global.response.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +16,15 @@ import java.net.BindException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ErrorException.class)
     public ResponseEntity<ApiResponse<Void>> handleErrorException(ErrorException e){
         ErrorCode errorCode = e.getErrorCode();
+
+        log.error("Error occurred: {}", errorCode.getMessage(), e);
 
         return ResponseEntity
                 .status(errorCode.getStatus())
@@ -33,6 +37,8 @@ public class GlobalExceptionHandler {
                 "유효하지 않은 입력 값입니다."
         );
 
+        log.error("Validation error: {}", e.getMessage(), e);
+
         return ResponseEntity
                 .badRequest()
                 .body(ApiResponse.error("validation_error", errorResponse));
@@ -43,6 +49,8 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
                 "파일 크기가 최대 허용 크기(5MB)를 초과했습니다."
         );
+
+        log.error("File size exceeded: {}", e.getMessage(), e);
 
         return ResponseEntity
                 .status(413)
@@ -55,6 +63,8 @@ public class GlobalExceptionHandler {
                 "요청 크기가 최대 허용 크기(20MB)를 초과했습니다."
         );
 
+        log.error("Request size exceeded: {}", e.getMessage(), e);
+
         return ResponseEntity
                 .status(413)
                 .body(ApiResponse.error("request_size_exceeded", errorResponse));
@@ -65,6 +75,8 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
                 "파일 크기가 최대 허용 크기(5MB)를 초과했습니다."
         );
+
+        log.error("File size exceeded: {}", e.getMessage(), e);
 
         return ResponseEntity
                 .status(413)

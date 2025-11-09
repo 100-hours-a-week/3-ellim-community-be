@@ -21,4 +21,22 @@ public interface PostCommentRepository extends JpaRepository<PostComment, Long> 
         ORDER BY comment_id ASC
         LIMIT :limit""", nativeQuery = true)
     List<PostComment> findNextPageByPostId(@Param("postId") Long postId, @Param("lastCommentId") Long lastCommentId, @Param("limit") int limit);
+
+    @Query(value = """
+            SELECT * FROM post_comments
+            WHERE post_id = :postId
+            ORDER BY comment_id DESC
+            LIMIT :limit
+            """, nativeQuery = true
+    )
+    List<PostComment> findLastestPageByPostId(@Param("postId") Long postId, @Param("limit") int limit);
+
+    @Query(value = """
+            SELECT * FROM post_comments
+            WHERE post_id = :postId AND comment_id < :firstCommentId
+            ORDER BY comment_id DESC
+            LIMIT :limit
+            """, nativeQuery = true
+    )
+    List<PostComment> findPrevPageByPostId(@Param("postId") Long postId, @Param("firstCommentId") Long firstCommentId, @Param("limit") int limit);
 }

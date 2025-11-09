@@ -5,6 +5,7 @@ import gguip1.community.domain.auth.dto.AuthResponse;
 import gguip1.community.domain.auth.service.AuthService;
 import gguip1.community.global.context.SecurityContext;
 import gguip1.community.global.response.ApiResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

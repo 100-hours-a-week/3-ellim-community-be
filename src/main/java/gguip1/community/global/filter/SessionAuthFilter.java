@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -25,6 +26,7 @@ import java.util.Arrays;
  * 인증 실패 시 예외 처리
  * 요청 처리 후 SecurityContext 정리
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SessionAuthFilter extends OncePerRequestFilter {
@@ -45,13 +47,30 @@ public class SessionAuthFilter extends OncePerRequestFilter {
             "/images/profile-img" // 프로필 이미지 업로드 엔드포인트
     };
 
+    private static final String[] EXCLUDED_PATHS_PREFIX = {
+            "/images/"
+    };
+
     /*
      * 필터링 제외 경로 설정
      */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return Arrays.asList(EXCLUDED_PATHS).contains(path);
+
+        for (String excludedPath : EXCLUDED_PATHS) {
+            if (path.equals(excludedPath)) {
+                return true;
+            }
+        }
+
+        for (String prefix : EXCLUDED_PATHS_PREFIX) {
+            if (path.startsWith(prefix)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /*
@@ -79,10 +98,8 @@ public class SessionAuthFilter extends OncePerRequestFilter {
             SecurityContext.setCurrentUserId(userId); // SecurityContext에 userId 설정
 
             filterChain.doFilter(request, response); // 다음 필터 또는 리소스로 요청 전달
-        } catch (ErrorException ex) {
-            handlerExceptionResolver.resolveException(request, response, null, ex);
         } catch (Exception ex) {
-            handlerExceptionResolver.resolveException(request, response, null, new ErrorException(ErrorCode.INTERNAL_SERVER_ERROR));
+            handlerExceptionResolver.resolveException(request, response, null, ex);
         } finally {
             SecurityContext.clear(); // 요청 처리 후 SecurityContext 정리
         }

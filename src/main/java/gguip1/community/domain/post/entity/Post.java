@@ -5,7 +5,6 @@ import gguip1.community.global.entity.SoftDeleteEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +29,7 @@ public class Post extends SoftDeleteEntity {
     private String content;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("imageOrder ASC")
     private List<PostImage> postImages = new ArrayList<>();
 
     @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)

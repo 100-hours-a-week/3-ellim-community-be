@@ -40,9 +40,7 @@ public class User extends SoftDeleteEntity {
     }
 
     public void updateProfile(Image profileImage, String nickname){
-        if (profileImage != null){
-            this.profileImage = profileImage;
-        }
+        this.profileImage = profileImage;
         if (nickname != null){
             this.nickname = nickname;
         }

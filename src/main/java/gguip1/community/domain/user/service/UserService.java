@@ -12,9 +12,11 @@ import gguip1.community.global.exception.ErrorCode;
 import gguip1.community.global.exception.ErrorException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -68,9 +70,11 @@ public class UserService {
                     .orElseThrow(() -> new ErrorException(ErrorCode.NOT_FOUND));
         }
 
-        if (!request.nickname().equals(user.getNickname())) {
-            if (userRepository.existsByNickname(request.nickname())) {
-                throw new ErrorException(ErrorCode.DUPLICATE_NICKNAME);
+        if (request.nickname() != null){
+            if (!request.nickname().equals(user.getNickname())) {
+                if (userRepository.existsByNickname(request.nickname())) {
+                    throw new ErrorException(ErrorCode.DUPLICATE_NICKNAME);
+                }
             }
         }
 

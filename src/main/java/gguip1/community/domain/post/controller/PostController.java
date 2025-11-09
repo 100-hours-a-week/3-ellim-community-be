@@ -3,6 +3,7 @@ package gguip1.community.domain.post.controller;
 import gguip1.community.domain.post.dto.request.PostCreateRequest;
 import gguip1.community.domain.post.dto.request.PostUpdateRequest;
 import gguip1.community.domain.post.dto.response.PostDetailResponse;
+import gguip1.community.domain.post.dto.response.PostPageItemResponse;
 import gguip1.community.domain.post.dto.response.PostPageResponse;
 import gguip1.community.domain.post.service.PostService;
 import gguip1.community.global.context.SecurityContext;
@@ -21,10 +22,10 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public ResponseEntity<ApiResponse<Void>> createPost(@Valid @RequestBody PostCreateRequest postCreateRequest) {
-        postService.createPost(SecurityContext.getCurrentUserId(), postCreateRequest);
+    public ResponseEntity<ApiResponse<PostPageItemResponse>> createPost(@Valid @RequestBody PostCreateRequest postCreateRequest) {
+        PostPageItemResponse response = postService.createPost(SecurityContext.getCurrentUserId(), postCreateRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                ApiResponse.success("Post created", null)
+                ApiResponse.success("Post created", response)
         );
     }
 
@@ -33,7 +34,6 @@ public class PostController {
             @RequestParam Optional<Long> lastPostId
     ){
         PostPageResponse response = postService.getPosts(lastPostId.orElse(null), 5);
-        System.out.println(response);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ApiResponse.success("Posts retrieved successfully", response)
         );
