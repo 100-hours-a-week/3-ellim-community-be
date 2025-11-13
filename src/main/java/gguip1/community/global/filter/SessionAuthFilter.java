@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -26,30 +27,14 @@ import java.util.Arrays;
  * 인증 실패 시 예외 처리
  * 요청 처리 후 SecurityContext 정리
  */
-@Slf4j
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SessionAuthFilter extends OncePerRequestFilter {
     private final HandlerExceptionResolver handlerExceptionResolver;
 
-    /*
-     * 필터링 제외 경로 목록
-     * 로그인 회원가입, 이메일/닉네임 중복 확인, 약관, 에러 처리 등
-     */
-    private static final String[] EXCLUDED_PATHS = {
-            "/auth", // 로그인 및 로그아웃 엔드포인트
-            "/users", // 회원가입 엔드포인트
-            "/users/check-email", // 이메일 중복 확인 엔드포인트
-            "/users/check-nickname", // 닉네임 중복 확인 엔드포인트
-            "/terms", // 이용약관
-            "/privacy", // 개인정보처리방침
-            "/error", // 에러 처리 엔드포인트
-            "/images/profile-img" // 프로필 이미지 업로드 엔드포인트
-    };
-
-    private static final String[] EXCLUDED_PATHS_PREFIX = {
-            "/images/"
-    };
+    @Value("#{'${auth.excluded-paths}'.split(',')}")
+    private final String[] EXCLUDED_PATHS;
 
     /*
      * 필터링 제외 경로 설정
@@ -57,20 +42,7 @@ public class SessionAuthFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-
-        for (String excludedPath : EXCLUDED_PATHS) {
-            if (path.equals(excludedPath)) {
-                return true;
-            }
-        }
-
-        for (String prefix : EXCLUDED_PATHS_PREFIX) {
-            if (path.startsWith(prefix)) {
-                return true;
-            }
-        }
-
-        return false;
+        return Arrays.asList(EXCLUDED_PATHS).contains(path);
     }
 
     /*
@@ -98,7 +70,7 @@ public class SessionAuthFilter extends OncePerRequestFilter {
             SecurityContext.setCurrentUserId(userId); // SecurityContext에 userId 설정
 
             filterChain.doFilter(request, response); // 다음 필터 또는 리소스로 요청 전달
-        } catch (Exception ex) {
+        } catch (ErrorException ex) {
             handlerExceptionResolver.resolveException(request, response, null, ex);
         } finally {
             SecurityContext.clear(); // 요청 처리 후 SecurityContext 정리
