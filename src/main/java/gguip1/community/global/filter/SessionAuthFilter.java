@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -27,36 +29,19 @@ import java.util.Arrays;
  */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SessionAuthFilter extends OncePerRequestFilter {
     private final HandlerExceptionResolver handlerExceptionResolver;
 
-    /*
-     * 필터링 제외 경로 목록
-     * 로그인 회원가입, 이메일/닉네임 중복 확인, 약관, 에러 처리 등
-     */
-    private static final String[] EXCLUDED_PATHS = {
-            "/auth", // 로그인 및 로그아웃 엔드포인트
-            "/users", // 회원가입 엔드포인트
-            "/users/check-email", // 이메일 중복 확인 엔드포인트
-            "/users/check-nickname", // 닉네임 중복 확인 엔드포인트
-            "/terms", // 이용약관
-            "/privacy", // 개인정보처리방침
-            "/error", // 에러 처리 엔드포인트
-            "/images/profile-img" // 프로필 이미지 업로드 엔드포인트
-    };
+    @Value("#{'${auth.excluded-paths}'.split(',')}")
+    private final String[] EXCLUDED_PATHS;
 
-    /*
-     * 필터링 제외 경로 설정
-     */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
         return Arrays.asList(EXCLUDED_PATHS).contains(path);
     }
 
-    /*
-     * 세션 기반 인증 처리
-     */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -81,8 +66,6 @@ public class SessionAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response); // 다음 필터 또는 리소스로 요청 전달
         } catch (ErrorException ex) {
             handlerExceptionResolver.resolveException(request, response, null, ex);
-        } catch (Exception ex) {
-            handlerExceptionResolver.resolveException(request, response, null, new ErrorException(ErrorCode.INTERNAL_SERVER_ERROR));
         } finally {
             SecurityContext.clear(); // 요청 처리 후 SecurityContext 정리
         }

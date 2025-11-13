@@ -1,6 +1,7 @@
 package gguip1.community.global.config;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,22 +15,29 @@ import java.util.logging.Filter;
 @Configuration
 public class CorsConfig {
 
-    /**
-     * CORS 필터 설정
-     * setAllowCredentials(true) : 자격 증명 허용
-     * setAllowedOrigins(List.of("http://localhost:3000")) : 허용할 출처 설정
-     * setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")) : 허용할 HTTP 메서드 설정
-     * setAllowedHeaders(List.of("*")) : 허용할 헤더 설정
-     * setMaxAge(3600L) : 사전 요청 캐시 시간 설정
-     */
+    @Value("${cors.allow-credentials}")
+    private Boolean allowCredentials;
+
+    @Value("#{'${cors.allowed-origins}'.split(',')}")
+    private List<String> allowedOrigins;
+
+    @Value("#{'${cors.allowed-methods}'.split(',')}")
+    private List<String> allowedMethods;
+
+    @Value("#{'${cors.allowed-headers}'.split(',')}")
+    private List<String> allowedHeaders;
+
+    @Value("${cors.max-age}")
+    private Long maxAge;
+
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost:3000"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setMaxAge(3600L);
+        config.setAllowCredentials(allowCredentials);
+        config.setAllowedOrigins(allowedOrigins);
+        config.setAllowedMethods(allowedMethods);
+        config.setAllowedHeaders(allowedHeaders);
+        config.setMaxAge(maxAge);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
