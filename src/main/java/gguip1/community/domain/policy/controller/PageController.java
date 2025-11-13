@@ -1,6 +1,6 @@
-package gguip1.community.global.controller;
+package gguip1.community.domain.policy.controller;
 
-import gguip1.community.global.service.PageService;
+import gguip1.community.domain.policy.service.PageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,8 +1,8 @@
-package gguip1.community.global.service;
+package gguip1.community.domain.policy.service;
 
-import gguip1.community.global.response.ContactInfo;
-import gguip1.community.global.response.PolicyPageResponse;
-import gguip1.community.global.response.PolicySections;
+import gguip1.community.domain.policy.dto.response.ContactInfo;
+import gguip1.community.domain.policy.dto.response.PolicyPageResponse;
+import gguip1.community.domain.policy.dto.response.PolicySections;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
