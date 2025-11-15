@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 @Component
+@Slf4j
 public class SessionAuthFilter extends OncePerRequestFilter {
     private final HandlerExceptionResolver handlerExceptionResolver;
     private final String[] excludedPaths;
@@ -46,7 +48,7 @@ public class SessionAuthFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            HttpSession httpSession = request.getSession(false); // 기존 세션이 없으면 null 반환
+            HttpSession httpSession = request.getSession(false);
 
             if (httpSession == null) {
                 throw new ErrorException(ErrorCode.UNAUTHORIZED);

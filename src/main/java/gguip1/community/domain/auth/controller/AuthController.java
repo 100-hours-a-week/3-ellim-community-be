@@ -36,7 +36,7 @@ public class AuthController {
     @DeleteMapping("/auth")
     public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest request,
                                                     HttpServletResponse response) {
-        SecurityContext.clear();
+//        SecurityContext.clear();
 
         Cookie cookie = new Cookie("JSESSIONID", null);
         cookie.setPath("/");
