@@ -9,10 +9,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
@@ -20,25 +19,26 @@ import java.io.IOException;
 import java.util.Arrays;
 
 @Component
-@RequiredArgsConstructor
 public class SessionAuthFilter extends OncePerRequestFilter {
     private final HandlerExceptionResolver handlerExceptionResolver;
+    private final String[] excludedPaths;
+    private final AntPathMatcher matcher = new AntPathMatcher();
 
-    @Value("#{'${auth.excluded-paths}'.split(',')}")
-    private final String[] EXCLUDED_PATHS;
+    public SessionAuthFilter(
+            HandlerExceptionResolver handlerExceptionResolver,
+            @Value("#{'${auth.excluded-paths}'.split(',')}") String[] excludedPaths
+    ) {
+        this.handlerExceptionResolver = handlerExceptionResolver;
+        this.excludedPaths = excludedPaths;
+    }
 
-    /*
-     * 필터링 제외 경로 설정
-     */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return Arrays.asList(EXCLUDED_PATHS).contains(path);
+        return Arrays.stream(excludedPaths)
+                .anyMatch(pattern -> matcher.match(pattern.trim(), path));
     }
 
-    /*
-     * 세션 기반 인증 처리
-     */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
