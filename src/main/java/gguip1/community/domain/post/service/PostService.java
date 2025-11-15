@@ -55,6 +55,10 @@ public class PostService {
 
         List<Long> imageIds = postCreateRequest.imageIds();
 
+        if (imageIds == null || imageIds.isEmpty()) {
+            return postMapper.toPostPageItemResponse(post, user, 0, 0, 0);
+        }
+
         Map<Long, Image> imageMap = imageRepository.findAllById(imageIds).stream()
                 .collect(Collectors.toMap(Image::getImageId, Function.identity()));
 
@@ -176,6 +180,10 @@ public class PostService {
         postImageRepository.deleteAllByPost_PostId(postId);
 
         List<Long> imageIds = postUpdateRequest.imageIds();
+
+        if (imageIds == null || imageIds.isEmpty()) {
+            return;
+        }
 
         Map<Long, Image> imageMap = imageRepository.findAllById(imageIds).stream()
                 .collect(Collectors.toMap(Image::getImageId, Function.identity()));
