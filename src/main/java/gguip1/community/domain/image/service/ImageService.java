@@ -21,14 +21,13 @@ public class ImageService {
 
     public ImageResponse uploadImage(MultipartFile multipartFile) throws IOException {
         MultipartFile compressedImage = imageCompressor.compressImage(multipartFile, 0.7f);
-        ImageResponse response = new ImageResponse();
 
         String imageUrl = "http://localhost:8080/images/" + fileService.uploadFile(compressedImage);
-        response.setImageUrl(imageUrl);
-
         Image uploadImage = imageRepository.save(imageMapper.toEntity(imageUrl));
-        response.setImageId(uploadImage.getImageId());
 
-        return response;
+        return ImageResponse.builder()
+                .imageId(uploadImage.getImageId())
+                .imageUrl(imageUrl)
+                .build();
     }
 }

@@ -2,11 +2,16 @@ spring:
   config:
     activate:
       on-profile: prod
+    import: "aws-parameterstore:/ktb-community-backend-ps/"
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
 
   datasource:
-    url: jdbc:mysql://${DB_URL}:3306/community?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://${database.url}/community?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
+    username: ${database.username}
+    password: ${database.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -21,10 +26,20 @@ spring:
     store-type: jdbc
     jdbc:
       initialize-schema: never
-    timeout: ${SESSION_TIMEOUT}
+    timeout: 1800
 
 logging:
   level:
     org.hibernate: INFO
     org.springframework: INFO
     com.zaxxer.hikari: INFO
+
+cors:
+  allow-credentials: ${cors.allow-credentials}
+  allowed-origins: ${cors.allow-origins}
+  allowed-methods: ${cors.allow-methods}
+  allowed-headers: ${cors.allowed-headers}
+  max-age: ${cors.max-age}
+
+auth:
+  excluded-paths: ${auth.excluded-paths}

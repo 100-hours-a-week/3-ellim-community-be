@@ -20,7 +20,7 @@ public class PostCommentController {
     public ResponseEntity<ApiResponse<PostCommentPageResponse>> getComments(@PathVariable Long postId,
                                                                             @RequestParam(required = false) Long lastCommentId,
                                                                             @RequestParam(defaultValue = "10") int size) {
-        PostCommentPageResponse response = postCommentService.getComments(SecurityContext.getCurrentUserId(), postId, lastCommentId, size);
+        PostCommentPageResponse response = postCommentService.getLatestComments(SecurityContext.getCurrentUserId(), postId, lastCommentId, size);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("Comments retrieved successfully", response));
     }
 

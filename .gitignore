@@ -38,4 +38,4 @@ out/
 src/main/resources/templates/.env
 
 .env.properties
-application-dev.yml
+**/application-dev.yml

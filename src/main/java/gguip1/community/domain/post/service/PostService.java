@@ -1,5 +1,6 @@
 package gguip1.community.domain.post.service;
 
+import gguip1.community.domain.image.dto.ImageResponse;
 import gguip1.community.domain.image.entity.Image;
 import gguip1.community.domain.image.repository.ImageRepository;
 import gguip1.community.domain.post.dto.request.PostCreateRequest;
@@ -24,9 +25,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,12 +45,7 @@ public class PostService {
     private final PostImageMapper postImageMapper;
 
     @Transactional
-    public void createPost(Long userId, PostCreateRequest postCreateRequest) {
-        List<Image> images = Collections.emptyList();
-        if (postCreateRequest.imageIds() != null && !postCreateRequest.imageIds().isEmpty()) {
-            images = imageRepository.findAllById(postCreateRequest.imageIds());
-        }
-
+    public PostPageItemResponse createPost(Long userId, PostCreateRequest postCreateRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ErrorException(ErrorCode.USER_NOT_FOUND));
 
@@ -55,12 +53,33 @@ public class PostService {
 
         postRepository.save(post);
 
-        AtomicInteger imageOrder = new AtomicInteger(0);
-        List<PostImage> postImages = images.stream()
-                .map(image -> postImageMapper.toEntity(post, image, (byte) imageOrder.getAndIncrement()))
-                .toList();
+        List<Long> imageIds = postCreateRequest.imageIds();
+
+        Map<Long, Image> imageMap = imageRepository.findAllById(imageIds).stream()
+                .collect(Collectors.toMap(Image::getImageId, Function.identity()));
+
+        List<PostImage> postImages = new ArrayList<>();
+
+        for (int i = 0; i < imageIds.size(); i++){
+            Long imageId = imageIds.get(i);
+            Image image = imageMap.get(imageId);
+            if (image == null){
+                throw new ErrorException(ErrorCode.NOT_FOUND);
+            }
+
+            postImages.add(
+                    PostImage.builder()
+                            .postImageId(new PostImageId(post.getPostId(), imageId))
+                            .post(post)
+                            .image(image)
+                            .imageOrder((byte) i)
+                            .build()
+            );
+        }
 
         postImageRepository.saveAll(postImages);
+
+        return postMapper.toPostPageItemResponse(post, user, 0, 0, 0);
     }
 
     @Transactional
@@ -75,13 +94,13 @@ public class PostService {
                 .map(post -> {
                     User user = post.getUser();
 
-                    List<String> imageUrls = post.getPostImages().stream()
-                            .map(postImage -> postImage.getImage().getUrl())
+                    List<ImageResponse> images = post.getPostImages().stream()
+                            .map(postImageMapper::toImageResponse)
                             .toList();
 
                     return PostPageItemResponse.builder()
                             .postId(post.getPostId())
-                            .imageUrls(imageUrls)
+                            .images(images)
                             .title(post.getTitle())
                             .content(post.getContent())
                             .author(new AuthorResponse(
@@ -116,15 +135,15 @@ public class PostService {
 
         User user = post.getUser();
 
-        List<String> imageUrls = post.getPostImages().stream()
-                .map(postImage -> postImage.getImage().getUrl())
+        List<ImageResponse> images = post.getPostImages().stream()
+                .map(postImageMapper::toImageResponse)
                 .toList();
 
         boolean isAuthor = userId != null && userId.equals(user.getUserId());
         boolean isLiked = userId != null && postLikeRepository.existsById(new PostLikeId(userId, postId));
 
         return PostDetailResponse.builder()
-                .imageUrls(imageUrls)
+                .images(images)
                 .title(post.getTitle())
                 .content(post.getContent())
                 .author(new AuthorResponse(
@@ -156,23 +175,30 @@ public class PostService {
 
         postImageRepository.deleteAllByPost_PostId(postId);
 
-        List<Image> images = Collections.emptyList();
-        if (postUpdateRequest.imageIds() != null && !postUpdateRequest.imageIds().isEmpty()) {
-            images = imageRepository.findAllById(postUpdateRequest.imageIds());
-        }
+        List<Long> imageIds = postUpdateRequest.imageIds();
 
-        AtomicInteger order = new AtomicInteger(0);
-        List<PostImage> postImages = images.stream()
-                .map(image -> {
-                    PostImageId postImageId = new PostImageId(post.getPostId(), image.getImageId());
-                    return PostImage.builder()
-                            .postImageId(postImageId)
+        Map<Long, Image> imageMap = imageRepository.findAllById(imageIds).stream()
+                .collect(Collectors.toMap(Image::getImageId, Function.identity()));
+
+        List<PostImage> postImages = new ArrayList<>();
+
+        for (int i = 0; i < imageIds.size(); i++){
+            Long imageId = imageIds.get(i);
+            Image image = imageMap.get(imageId);
+            if (image == null){
+                throw new ErrorException(ErrorCode.NOT_FOUND);
+            }
+
+            postImages.add(
+                    PostImage.builder()
+                            .postImageId(new PostImageId(postId, imageId))
                             .post(post)
                             .image(image)
-                            .imageOrder((byte) order.getAndIncrement())
-                            .build();
-                })
-                .toList();
+                            .imageOrder((byte) i)
+                            .build()
+            );
+        }
+
         postImageRepository.saveAll(postImages);
     }
 

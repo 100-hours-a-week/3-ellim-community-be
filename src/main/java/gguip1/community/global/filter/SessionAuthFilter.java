@@ -9,37 +9,34 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-/**
- * 세션 기반 인증 필터
- * OncePerRequestFilter를 상속하여 각 요청마다 한 번씩 실행되는 필터
- * 특정 경로는 필터링에서 제외
- * 세션에서 userId를 추출하여 SecurityContext에 설정
- * 인증 실패 시 예외 처리
- * 요청 처리 후 SecurityContext 정리
- */
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class SessionAuthFilter extends OncePerRequestFilter {
     private final HandlerExceptionResolver handlerExceptionResolver;
+    private final String[] excludedPaths;
+    private final AntPathMatcher matcher = new AntPathMatcher();
 
-    @Value("#{'${auth.excluded-paths}'.split(',')}")
-    private final String[] EXCLUDED_PATHS;
+    public SessionAuthFilter(
+            HandlerExceptionResolver handlerExceptionResolver,
+            @Value("#{'${auth.excluded-paths}'.split(',')}") String[] excludedPaths
+    ) {
+        this.handlerExceptionResolver = handlerExceptionResolver;
+        this.excludedPaths = excludedPaths;
+    }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return Arrays.asList(EXCLUDED_PATHS).contains(path);
+        return Arrays.stream(excludedPaths)
+                .anyMatch(pattern -> matcher.match(pattern.trim(), path));
     }
 
     @Override

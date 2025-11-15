@@ -40,6 +40,7 @@ public class PostCommentMapper {
                 .content(postComment.getContent())
                 .author(new AuthorResponse(user.getNickname(),
                         user.getProfileImage() != null ? user.getProfileImage().getUrl() : null))
+                .createdAt(postComment.getCreatedAt())
                 .isAuthor(isAuthor)
                 .build();
     }
