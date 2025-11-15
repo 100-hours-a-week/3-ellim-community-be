@@ -38,7 +38,7 @@ cors:
   allow-credentials: ${cors.allow-credentials}
   allowed-origins: ${cors.allow-origins}
   allowed-methods: ${cors.allow-methods}
-  allowed-headers: ${cors/allowed-headers}
+  allowed-headers: ${cors.allowed-headers}
   max-age: ${cors.max-age}
 
 auth:
