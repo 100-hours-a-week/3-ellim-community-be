@@ -13,32 +13,67 @@ spring:
     username: ${database.username}
     password: ${database.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+        maximum-pool-size: 20
+        minimum-idle: 5
+        idle-timeout: 300000
+        max-lifetime: 600000
+        connection-timeout: 30000
+        pool-name: CommunityHikariCP
+        leak-detection-threshold: 2000
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
-        format_sql: false
+        format_sql: true
+        generate_statistics: true
         use_sql_comments: false
+        session:
+          events:
+            log:
+              LOG_QUERIES_SLOWER_THAN_MS: 200
 
   session:
     store-type: jdbc
     jdbc:
-      initialize-schema: never
+      initialize-schema: always
     timeout: 1800
 
 logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
+  file:
+    name: /var/log/wepick/backend/app.log
+  logback:
+    rollingpolicy:
+      max-file-size: 50MB
+      max-history: 7
+      total-size-cap: 1GB
   level:
     root: INFO
-    gguip1.community: INFO
-    gguip1.community.global.filter: INFO
+#    root: INFO
+#    gguip1.community: INFO
+#    gguip1.community.global.filter: INFO
+#
+#    org.springframework: WARN
+#    org.springframework.jdbc.core: WARN
+#    org.springframework.session: WARN
+#    org.hibernate: WARN
+#    com.zaxxer.hikari: INFO
 
-    org.springframework: INFO
-    org.hibernate: WARN
-    org.springframework.jdbc.core: WARN
-    org.springframework.session: WARN
-    com.zaxxer.hikari: INFO
+    ### Detailed SQL logging for production debugging (use with caution) ###
+
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.stat: DEBUG
+    org.hibernate.SQL_SLOW: INFO
+
+    org.springframework.transaction: INFO
+    org.springframework.orm.jpa: INFO
+
+    com.zaxxer.hikari.pool.HikariPool: DEBUG
 
 cors:
   allow-credentials: ${cors.allow-credentials}
