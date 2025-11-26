@@ -17,7 +17,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +52,36 @@ public class PostCommentService {
 
         Long newLastCommentId = commentPageItemResponses.isEmpty() ? null :
                 commentPageItemResponses.getLast().commentId();
+
+        return new PostCommentPageResponse(
+                commentPageItemResponses,
+                hasNext,
+                newLastCommentId
+        );
+    }
+
+    @Transactional
+    public PostCommentPageResponse getLatestComments(Long userId, Long postId, Long lastCommentId, int size){
+        List<PostComment> postComments =
+                lastCommentId == null
+                        ? postCommentRepository.findLastestPageByPostId(postId,size + 1)
+                        : postCommentRepository.findPrevPageByPostId(postId, lastCommentId, size + 1);
+
+        boolean hasNext = postComments.size() > size;
+
+        List<PostCommentPageItemResponse> commentPageItemResponses = postComments.stream()
+                .limit(size)
+                .map(postComment -> {
+                    User user = postComment.getUser();
+                    boolean isAuthor = userId.equals(postComment.getUser().getUserId());
+
+                    return postCommentMapper.toPostCommentPageItemResponse(postComment, user, isAuthor);
+                }).collect(Collectors.toCollection(ArrayList::new));
+
+        Long newLastCommentId = commentPageItemResponses.isEmpty() ? null :
+                commentPageItemResponses.getLast().commentId();
+
+        Collections.reverse(commentPageItemResponses);
 
         return new PostCommentPageResponse(
                 commentPageItemResponses,

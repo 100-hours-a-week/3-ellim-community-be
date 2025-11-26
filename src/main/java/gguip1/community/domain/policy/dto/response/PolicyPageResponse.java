@@ -1,4 +1,4 @@
-package gguip1.community.global.response;
+package gguip1.community.domain.policy.dto.response;
 
 import lombok.Builder;
 

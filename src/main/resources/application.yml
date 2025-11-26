@@ -1,44 +1,18 @@
-server:
-  tomcat:
-    max-swallow-size: 20MB
-    max-http-form-post-size: 20MB
-  servlet:
-    session:
-      timeout: 30m
-
 spring:
   application:
-    name: community
-  datasource:
-    url: jdbc:mysql://localhost:3306/community?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
-    username: community_user
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    defer-datasource-initialization: true
-    hibernate:
-      ddl-auto: create
-      properties:
-        hibernate:
-          format_sql: true
-          use_sql_comments: true
-  profiles:
-    active: dev
+    name: "community"
+
   messages:
-    basename: ValidationMessages
-    encoding: UTF-8
+    basename: "ValidationMessages"
+    encoding: "UTF-8"
+
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 25MB
-      file-size-threshold: 2MB
+      max-file-size: "5MB"
+      max-request-size: "25MB"
+      file-size-threshold: "2MB"
       resolve-lazily: true
 
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.springframework.boot.servlet: DEBUG
-  charset:
-    console: UTF-8
-    file: UTF-8
-
+  mvc:
+    servlet:
+      path: "/api"

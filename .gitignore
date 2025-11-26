@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+src/main/resources/templates/.env
+
+.env.properties
+application-dev-local.yml
+docker.dev-local
+
+cmd.txt
