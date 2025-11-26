@@ -38,4 +38,7 @@ out/
 src/main/resources/templates/.env
 
 .env.properties
-**/application-dev.yml
+application-dev-local.yml
+docker.dev-local
+
+cmd.txt

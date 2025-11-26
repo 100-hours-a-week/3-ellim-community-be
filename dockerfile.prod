@@ -1,0 +1,9 @@
+FROM amazoncorretto:21-alpine
+
+WORKDIR /app
+
+COPY build/libs/community-0.0.1-SNAPSHOT.jar /app/community.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/app/community.jar", "--spring.profiles.active=prod"]
