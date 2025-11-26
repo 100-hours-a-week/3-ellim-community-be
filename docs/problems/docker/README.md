@@ -1,0 +1,90 @@
+
+# Single Stage Build Dockerfile
+
+```dockerfile
+FROM gradle:8.5-jdk21
+
+WORKDIR /app
+
+COPY build.gradle settings.gradle ./
+COPY src ./src
+
+RUN gradle build --no-daemon -x test
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/app/build/libs/community-0.0.1-SNAPSHOT.jar", "--spring.profiles.active=dev-local"]
+```
+
+# Multi Stage Build Dockerfile
+
+```dockerfile
+FROM gradle:8.5-jdk21 AS builder
+
+WORKDIR /app
+
+COPY build.gradle settings.gradle ./
+COPY src ./src
+
+RUN gradle build --no-daemon -x test
+
+FROM eclipse-temurin:21-jre-alpine AS runner
+
+WORKDIR /app
+
+COPY --from=builder /app/build/libs/community-0.0.1-SNAPSHOT.jar /app/community.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/app/community.jar", "--spring.profiles.active=dev-local"]
+```
+
+# Jlink Multi Stage Build Dockerfile
+
+```dockerfile
+FROM gradle:8.5-jdk21 AS builder
+
+WORKDIR /app
+
+COPY build.gradle settings.gradle ./
+COPY src ./src
+
+RUN gradle build --no-daemon -x test
+
+RUN jdeps --ignore-missing-deps -q --recursive --multi-release 21 \
+    --print-module-deps --class-path 'BOOT-INF/lib/*' \
+    build/libs/community-0.0.1-SNAPSHOT.jar > deps.info
+
+FROM amazoncorretto:21-alpine3.18 AS builder-jre
+
+WORKDIR /app
+
+COPY --from=builder /app/build/libs/community-0.0.1-SNAPSHOT.jar /app/
+COPY --from=builder /app/deps.info /app/
+
+RUN apk add --no-cache binutils
+
+RUN $JAVA_HOME/bin/jlink \
+    --module-path "$JAVA_HOME/jmods" \
+    --add-modules $(cat deps.info) \
+    --strip-debug \
+    --no-man-pages \
+    --no-header-files \
+    --compress=2 \
+    --output /jre
+
+FROM alpine:latest AS runner
+
+WORKDIR /app
+
+ENV JAVA_HOME=/jre
+ENV PATH="$JAVA_HOME/bin:$PATH"
+
+COPY --from=builder-jre /jre $JAVA_HOME
+
+COPY --from=builder /app/build/libs/community-0.0.1-SNAPSHOT.jar /app/community.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/app/community.jar", "--spring.profiles.active=dev-local"]
+```
