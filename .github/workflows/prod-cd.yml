@@ -38,7 +38,7 @@ jobs:
             --comment "Executed by Github Actions" \
             --parameters '{
               "commands": [
-                "aws s3 cp s3://${{ secrets.AWS_S3_BUCKET_NAME }}/fe/docker-compose.yml /home/ubuntu/docker-compose.yml",
+                "aws s3 cp s3://${{ secrets.AWS_S3_BUCKET_NAME }}/be/prod/docker-compose.yml /home/ubuntu/docker-compose.yml",
                 "sudo su - ubuntu -c \"cd /home/ubuntu && docker compose pull && docker compose up -d && docker image prune -f\""
               ]
             }'
