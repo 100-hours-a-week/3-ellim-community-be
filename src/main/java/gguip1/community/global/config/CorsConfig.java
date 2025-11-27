@@ -15,29 +15,34 @@ import java.util.logging.Filter;
 @Configuration
 public class CorsConfig {
 
-    @Value("${cors.allow-credentials}")
-    private Boolean allowCredentials;
-
-    @Value("#{'${cors.allowed-origins}'.split(',')}.![trim()]}")
-    private List<String> allowedOrigins;
-
-    @Value("#{'${cors.allowed-methods}'.split(',')}.![trim()]}")
-    private List<String> allowedMethods;
-
-    @Value("#{'${cors.allowed-headers}'.split(',')}.![trim()]}")
-    private List<String> allowedHeaders;
-
-    @Value("${cors.max-age}")
-    private Long maxAge;
+//    @Value("${cors.allow-credentials}")
+//    private Boolean allowCredentials;
+//
+//    @Value("#{'${cors.allowed-origins}'.split(',')}.![trim()]}")
+//    private List<String> allowedOrigins;
+//
+//    @Value("#{'${cors.allowed-methods}'.split(',')}.![trim()]}")
+//    private List<String> allowedMethods;
+//
+//    @Value("#{'${cors.allowed-headers}'.split(',')}.![trim()]}")
+//    private List<String> allowedHeaders;
+//
+//    @Value("${cors.max-age}")
+//    private Long maxAge;
 
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(allowCredentials);
-        config.setAllowedOrigins(allowedOrigins);
-        config.setAllowedMethods(allowedMethods);
-        config.setAllowedHeaders(allowedHeaders);
-        config.setMaxAge(maxAge);
+//        config.setAllowCredentials(allowCredentials);
+//        config.setAllowedOrigins(allowedOrigins);
+//        config.setAllowedMethods(allowedMethods);
+//        config.setAllowedHeaders(allowedHeaders);
+//        config.setMaxAge(maxAge);
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(List.of("http://localhost:3000", "https://wepick.cloud"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
