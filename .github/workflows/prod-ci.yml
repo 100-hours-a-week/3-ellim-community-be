@@ -73,7 +73,7 @@ jobs:
           context: .
           file: ./docker/prod/dockerfile
           push: true
-          platform: linux/arm64
+          platforms: linux/arm64
           tags: |
             ${{ env.ECR_REGISTRY }}/ktb-community/be-registry:${{ github.sha }}
             ${{ env.ECR_REGISTRY }}/ktb-community/be-registry:latest
