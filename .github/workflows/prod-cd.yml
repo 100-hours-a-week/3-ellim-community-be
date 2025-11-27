@@ -1,0 +1,57 @@
+name: BE CD - PROD
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+#  workflow_run:
+#    workflows: ["BE CI - PROD"]
+#    types:
+#      - completed
+#    paths-ignore:
+#      - "docs/**"
+#      - "**.md"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Upload Docker Compose file to S3
+        run: |
+          aws s3 cp docker-compose.yml s3://${{ secrets.AWS_S3_BUCKET_NAME }}/be/prod/docker-compose.yml
+
+      - name: Deploy to EC2 with Docker
+        run: |
+          aws ssm send-command \
+            --region ap-northeast-2 \
+            --instance-ids ${{ secrets.AWS_EC2_INSTANCE_ID }} \
+            --document-name "AWS-RunShellScript" \
+            --comment "Executed by Github Actions" \
+            --parameters '{
+              "commands": [
+                "aws s3 cp s3://${{ secrets.AWS_S3_BUCKET_NAME }}/be/dev/docker-compose.yml ./docker-compose.yml",
+                "sudo su - ubuntu -c \"cd /home/ubuntu && docker compose pull && docker compose up -d && docker image prune -f\""
+              ]
+            }'
+

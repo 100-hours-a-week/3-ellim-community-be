@@ -1,0 +1,7 @@
+services:
+  community_be:
+    # 작성 당시 AWS EC2에 미리 업로드한 .env 파일을 사용하도록 설정
+    # AWS Parameter Store와 같은 방법으로 환경 변수를 관리하는 것도 고려할 수 있음
+    image: ${AWS_BE_IMAGE}:latest
+    ports:
+      - "8080:8080"

@@ -69,7 +69,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         with:
           context: .
-          file: ./docker/production/dockerfile
+          file: ./docker/prod/dockerfile
           push: true
           tags: |
             ${{ env.ECR_REGISTRY }}/ktb-community/be-registry:${{ github.sha }}
