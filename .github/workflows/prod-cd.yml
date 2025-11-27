@@ -1,30 +1,18 @@
 name: BE CD - PROD
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["BE CI - PROD"]
+    types:
+      - completed
     paths-ignore:
       - "docs/**"
       - "**.md"
-  pull_request:
-    branches:
-      - main
-    paths-ignore:
-      - "docs/**"
-      - "**.md"
-#  workflow_run:
-#    workflows: ["BE CI - PROD"]
-#    types:
-#      - completed
-#    paths-ignore:
-#      - "docs/**"
-#      - "**.md"
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-#    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout Repository
@@ -51,7 +39,7 @@ jobs:
             --parameters '{
               "commands": [
                 "aws s3 cp s3://${{ secrets.AWS_S3_BUCKET_NAME }}/be/prod/docker-compose.yml ./docker-compose.yml",
-                "sudo su - ubuntu -c \"cd /home/ubuntu && docker compose pull && docker compose up -d && docker image prune -f\""
+                "sudo su - ubuntu -c "cd /home/ubuntu && docker compose pull && docker compose up -d && docker image prune -f""
               ]
             }'
 
