@@ -16,7 +16,7 @@ public class WebFilterConfig {
     public FilterRegistrationBean<Filter> sessionFilter() {
         FilterRegistrationBean<Filter> filterFilterRegistrationBean = new FilterRegistrationBean<>();
         filterFilterRegistrationBean.setFilter(sessionAuthFilter);
-        filterFilterRegistrationBean.addUrlPatterns("/*");
+        filterFilterRegistrationBean.addUrlPatterns("/**");
         filterFilterRegistrationBean.setOrder(1);
         return filterFilterRegistrationBean;
     }

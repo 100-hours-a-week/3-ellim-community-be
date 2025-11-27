@@ -18,13 +18,13 @@ public class CorsConfig {
     @Value("${cors.allow-credentials}")
     private Boolean allowCredentials;
 
-    @Value("#{'${cors.allowed-origins}'.split(',')}")
+    @Value("#{'${cors.allowed-origins}'.split(',')}.![trim()]}")
     private List<String> allowedOrigins;
 
-    @Value("#{'${cors.allowed-methods}'.split(',')}")
+    @Value("#{'${cors.allowed-methods}'.split(',')}.![trim()]}")
     private List<String> allowedMethods;
 
-    @Value("#{'${cors.allowed-headers}'.split(',')}")
+    @Value("#{'${cors.allowed-headers}'.split(',')}.![trim()]}")
     private List<String> allowedHeaders;
 
     @Value("${cors.max-age}")
