@@ -76,5 +76,3 @@ jobs:
             ${{ env.ECR_REGISTRY }}/ktb-community/be-registry:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-

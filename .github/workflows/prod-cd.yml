@@ -52,7 +52,7 @@ jobs:
             --comment "Health Check Executed by Github Actions" \
             --parameters '{
               "commands": [
-                "curl -f http://localhost:8080/api/health || exit 1"
+                "curl -f http://localhost:8080/api/health2 || exit 1"
               ]
             }'
 
