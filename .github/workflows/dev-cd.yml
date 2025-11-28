@@ -1,0 +1,36 @@
+name: BE CD - DEV
+
+on:
+  workflow_run:
+    workflows: ["BE CI - DEV"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04-arm
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.AWS_EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Deploy to EC2 with Docker
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@${{ secrets.AWS_EC2_DEV_BE_DNS }} << 'EOF'
+            aws s3 cp s3://${{ secrets.AWS_S3_BUCKET_NAME }}/dev/be/docker-compose.yml /home/ubuntu/be/docker-compose.yml
+            sudo su - ubuntu -c "cd /home/ubuntu/be && docker compose pull && docker compose up -d && docker image prune -f"
+          EOF
