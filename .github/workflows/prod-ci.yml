@@ -72,7 +72,7 @@ jobs:
           push: true
           platforms: linux/arm64
           tags: |
-            ${{ env.ECR_REGISTRY }}/ktb-community/be-registry:${{ github.sha }}
-            ${{ env.ECR_REGISTRY }}/ktb-community/be-registry:latest
+            ${{ env.ECR_REGISTRY }}/ktb-community/dev/be-registry:${{ github.sha }}
+            ${{ env.ECR_REGISTRY }}/ktb-community/dev/be-registry:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
