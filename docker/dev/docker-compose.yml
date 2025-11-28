@@ -1,6 +1,6 @@
 services:
   community-be:
-    image: public.ecr.aws/a3y4e2t5/ktb-community/be-registry:latest
+    image: public.ecr.aws/a3y4e2t5/ktb-community/dev/be-registry:latest
     container_name: community-be
     restart: unless-stopped
     networks:
