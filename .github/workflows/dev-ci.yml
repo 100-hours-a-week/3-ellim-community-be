@@ -40,9 +40,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -50,23 +47,31 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
+      - name: Upload Docker Compose file to S3
+        run: |
+          aws s3 cp ./docker/dev/docker-compose.yml s3://${{ secrets.AWS_S3_BUCKET_NAME }}/dev/be/docker-compose.yml
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         with:
+          registry-type: public
           mask-password: true
+        env:
+          AWS_DEFAULT_REGION: us-east-1
+          AWS_REGION: us-east-1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
       - name: Build and Push Docker Image to ECR
         uses: docker/build-push-action@v4
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         with:
           context: .
           file: ./docker/dev/dockerfile
           push: true
-#          platforms: linux/arm64
           tags: |
-            ${{ env.ECR_REGISTRY }}/ktb-community/be-registry:${{ github.sha }}
-            ${{ env.ECR_REGISTRY }}/ktb-community/be-registry:latest
+            ${{ steps.login-ecr.outputs.registry }}/a3y4e2t5/ktb-community/be-registry:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/a3y4e2t5/ktb-community/be-registry:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
