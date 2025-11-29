@@ -51,3 +51,9 @@ cors:
 auth:
   excluded-paths: ${auth.excluded-paths}
 
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: None
+        secure: true
