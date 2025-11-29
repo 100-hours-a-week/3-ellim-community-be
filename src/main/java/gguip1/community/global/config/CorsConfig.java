@@ -40,7 +40,7 @@ public class CorsConfig {
 //        config.setAllowedMethods(allowedMethods);
 //        config.setAllowedHeaders(allowedHeaders);
 //        config.setMaxAge(maxAge);
-        config.setAllowCredentials(false);
+        config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of("http://localhost:3000", "https://wepick.cloud"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
