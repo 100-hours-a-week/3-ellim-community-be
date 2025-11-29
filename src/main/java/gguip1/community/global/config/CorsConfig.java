@@ -1,6 +1,7 @@
 package gguip1.community.global.config;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.logging.Filter;
 
 @Configuration
+@Slf4j
 public class CorsConfig {
 
 //    @Value("${cors.allow-credentials}")
@@ -43,6 +45,15 @@ public class CorsConfig {
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setMaxAge(3600L);
+
+        log.debug(
+                "CORS Config - allowCredentials: {}, allowedOrigins: {}, allowedMethods: {}, allowedHeaders: {}, maxAge: {}",
+                config.getAllowCredentials(),
+                config.getAllowedOrigins(),
+                config.getAllowedMethods(),
+                config.getAllowedHeaders(),
+                config.getMaxAge()
+        );
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
